@@ -93,17 +93,17 @@ const Sidebar: React.FC<SidebarProps> = ({ setSidebarCollapsed }) => {
         showMiniSidebar ? "w-[64px]" : "w-[228px]"
       }`}
     >
-      <div className="h-[64px] p-2">
+      <div
+        className={`h-[64px] p-2 ${
+          showMiniSidebar ? "flex justify-center" : ""
+        }`}
+      >
         <div
           className={`w-full p-2 pr-0 flex items-center navbar-transition ${
-            showMiniSidebar ? "justify-center" : "justify-around gap-2"
+            showMiniSidebar ? "justify-center p-0" : "justify-around gap-2"
           }`}
         >
-          <Image
-            src={FrontDeskLogo}
-            alt="Logo"
-            priority
-          />
+          <Image src={FrontDeskLogo} alt="Logo" priority />
           {!showMiniSidebar && (
             <>
               <div className="w-[150px] h-6 font-poppins text-base font-semibold leading-6 text-left">
@@ -140,12 +140,12 @@ const Sidebar: React.FC<SidebarProps> = ({ setSidebarCollapsed }) => {
                   : "justify-between w-[212px]"
               }`}
             >
-              {!showMiniSidebar && <div className="text-xs leading-5 text-smokey_black font-medium">Location Name</div>}
-              <Image
-                src={ArrowLeftRight}
-                alt="Left Right Arrow"
-                priority
-              />
+              {!showMiniSidebar && (
+                <div className="text-xs leading-5 text-smokey_black font-medium">
+                  Location Name
+                </div>
+              )}
+              <Image src={ArrowLeftRight} alt="Left Right Arrow" priority />
             </div>
             <div className="flex justify-center">
               <div
@@ -173,11 +173,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setSidebarCollapsed }) => {
                       !showMiniSidebar ? "w-[100px] flex gap-1" : ""
                     }`}
                   >
-                    <Image
-                      src={Globe}
-                      alt="Globe"
-                      priority
-                    />
+                    <Image src={Globe} alt="Globe" priority />
                     {!showMiniSidebar && (
                       <div className="text-xs font-medium text-left text-smokey_black">
                         UTC: +5 hours

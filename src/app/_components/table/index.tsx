@@ -1,111 +1,33 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
+import _ from "lodash";
 
-import { CalendarOutlined, Check, Hash, Status, UserOutlined } from "@assets";
-import { Waitlist } from "@types";
+import { Check } from "@assets";
+import {
+  TableHeader,
+  TableRow,
+} from "@types";
 import { RootState } from "@store";
 import Row from "./components/row";
 import Footer from "./components/footer";
 import Toolbar from "./components/toolbar";
 
-export enum TableHeaders {
-  CreatedOn = "createdOn",
-  Payer = "payer",
-  Status = "status",
-  Email = "email",
-  PayerPhone = "payerPhone",
-  Services = "services",
-  Scheduled = "scheduled",
-}
-
-enum TableHeaderValues {
-  CreatedOn = "Created On",
-  Payer = "Payer",
-  Status = "Status",
-  Email = "Email",
-  PayerPhone = "Payer Phone",
-  Services = "Services",
-  Scheduled = "Scheduled",
-}
-
-export interface TableHeader {
-  id: number;
-  name: TableHeaders;
-  value: TableHeaderValues;
-  icon: string | StaticImport;
-  width: number;
-}
-
-export interface TableRow extends Waitlist {
-  hidden: boolean;
-}
-
 interface TableProps {
   sidebarCollapsed: boolean;
 }
 
-const tableHeaders: TableHeader[] = [
-  {
-    id: 1,
-    name: TableHeaders.CreatedOn,
-    value: TableHeaderValues.CreatedOn,
-    icon: CalendarOutlined,
-    width: 172,
-  },
-  {
-    id: 2,
-    name: TableHeaders.Payer,
-    value: TableHeaderValues.Payer,
-    icon: UserOutlined,
-    width: 152,
-  },
-  {
-    id: 3,
-    name: TableHeaders.Status,
-    value: TableHeaderValues.Status,
-    icon: Status,
-    width: 136,
-  },
-  {
-    id: 4,
-    name: TableHeaders.Email,
-    value: TableHeaderValues.Email,
-    icon: Hash,
-    width: 200,
-  },
-  {
-    id: 5,
-    name: TableHeaders.PayerPhone,
-    value: TableHeaderValues.PayerPhone,
-    icon: Hash,
-    width: 146,
-  },
-  {
-    id: 6,
-    name: TableHeaders.Services,
-    value: TableHeaderValues.Services,
-    icon: Hash,
-    width: 200,
-  },
-  {
-    id: 7,
-    name: TableHeaders.Scheduled,
-    value: TableHeaderValues.Scheduled,
-    icon: CalendarOutlined,
-    width: 170,
-  },
-];
-
 const getTableHeader = (header: TableHeader) => {
-  const { id, value, icon, width } = header;
+  const { id, value, icon, width, hidden } = header;
 
   return (
     <div
-      className="flex gap-1.5 pr-2"
-      style={{ minWidth: `${width}px` }}
+      className="flex-1 gap-1.5 pr-2 max-w-full"
+      style={{
+        minWidth: `${width}px`,
+        display: hidden ? "none" : "flex",
+      }}
       key={id}
     >
       <Image src={icon} alt={value} />
@@ -115,6 +37,10 @@ const getTableHeader = (header: TableHeader) => {
 };
 
 const Table: React.FC<TableProps> = ({ sidebarCollapsed }) => {
+  const tableHeaders = useSelector(
+    (root: RootState) => root.tableSlice.headers
+  );
+
   const waitlists = useSelector((root: RootState) => root.waitlistSlice).map(
     (waitlist) => ({ ...waitlist, hidden: false })
   );
@@ -144,8 +70,8 @@ const Table: React.FC<TableProps> = ({ sidebarCollapsed }) => {
     >
       <Toolbar />
       <div className="w-full flex flex-col gap-2 px-4 py-3">
-        <div className="w-full rounded-md overflow-auto border border-light_border">
-          <div className="flex justify-between items-center gap-4 px-4 py-2 border-b border-dark_border">
+        <div className="w-full h-[67.7vh] rounded-md overflow-auto border border-light_border">
+          <div className="flex justify-start items-center gap-4 px-4 py-2 border-b border-dark_border">
             <div
               className={`w-[14px] h-[14px] min-w-[14px] flex justify-center items-center rounded-[4px] shadow-shadow_gray ${
                 selectAll

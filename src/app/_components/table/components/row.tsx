@@ -2,9 +2,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
-import { TableHeader, TableHeaders, TableRow } from "..";
 import { Check } from "@assets";
-import { Status } from "@types";
+import { Status, TableHeader, TableHeaders, TableRow } from "@types";
 import { formatDate } from "@utils";
 import Dot from "@components/assets/dot";
 
@@ -21,7 +20,7 @@ interface Cell {
 
 const getTableCell = (cell: Cell) => {
   const { value, header } = cell;
-  const { id, width } = header;
+  const { id, width, hidden } = header;
 
   const statusColorMap = {
     [Status.Active]: {
@@ -59,8 +58,11 @@ const getTableCell = (cell: Cell) => {
 
   return (
     <div
-      className="flex justify-start gap-1.5 pr-2"
-      style={{ minWidth: `${width}px`, width: `${width}px` }}
+      className="flex flex-1 justify-start gap-1.5 pr-2"
+      style={{
+        minWidth: `${width}px`,
+        display: `${hidden ? "none" : "flex"}`,
+      }}
       key={`${id}: ${value}`}
     >
       <div
@@ -112,7 +114,7 @@ const Row: React.FC<RowProps> = ({ row, tableHeaders, selectAll }) => {
   }, [selectAll]);
 
   return (
-    <div className="flex justify-between items-center gap-4 px-4 py-2 border-b border-dark_border">
+    <div className="h-[40px] flex justify-start items-center gap-4 px-4 py-2 border-b border-dark_border">
       <div
         className={`w-[14px] h-[14px] min-w-[14px] flex justify-center items-center rounded-[4px] shadow-shadow_gray ${
           select ? "bg-pitch_black" : "bg-white border border-gray_border "

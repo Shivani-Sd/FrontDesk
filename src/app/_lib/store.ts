@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import waitlistSlice from "./features/waitlist/waitlistSlice";
+import tableSlice from "./features/table/tableSlice";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: { waitlistSlice },
+    reducer: { tableSlice, waitlistSlice },
   });
 };
 

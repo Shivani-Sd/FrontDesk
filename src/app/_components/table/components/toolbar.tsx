@@ -1,6 +1,8 @@
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import { Columns, Download, Filter, Refresh, Search } from "@assets";
+import EditColumnModal from "./editColumnModal";
 
 enum SummaryItemName {
   Waitlists = "All Waitlists",
@@ -28,24 +30,50 @@ const summaryItems: SummaryItem[] = [
   },
 ];
 
-const Toolbar: React.FC = () => {
-  const getSummaryItems = (summaryItem: SummaryItem) => {
-    const { name, count } = summaryItem;
+const getSummaryItems = (summaryItem: SummaryItem) => {
+  const { name, count } = summaryItem;
 
-    return (
-      <div
-        className="min-w-[125px] flex flex-1 items-baseline gap-1.5 rounded-md px-3 py-2.5 border border-light_border"
-        key={name}
-      >
-        <div className="text-xs font-semibold leading-5 text-left text-smokey_black">
-          {name}
-        </div>
-        <div className="text-[10px] font-medium leading-4 text-left text-gray_100">
-          {count}
-        </div>
+  return (
+    <div
+      className="min-w-[125px] flex flex-1 items-baseline gap-1.5 rounded-md px-3 py-2.5 border border-light_border"
+      key={name}
+    >
+      <div className="text-xs font-semibold leading-5 text-left text-smokey_black">
+        {name}
       </div>
-    );
+      <div className="text-[10px] font-medium leading-4 text-left text-gray_100">
+        {count}
+      </div>
+    </div>
+  );
+};
+
+const Toolbar: React.FC = () => {
+  const editColumnRef = useRef<HTMLDivElement>(null);
+
+  const [editColumns, setEditColumns] = useState<boolean>(false);
+
+  const handleEditColumns = () => {
+    setEditColumns((prev) => !prev);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        editColumnRef &&
+        editColumnRef.current &&
+        !editColumnRef.current.contains(e.target as Node)
+      ) {
+        setEditColumns(false);
+      }
+    };
+
+    document.addEventListener("mousedown", (e) => handleClickOutside(e));
+
+    return () => {
+      document.removeEventListener("mousedown", (e) => handleClickOutside(e));
+    };
+  }, []);
 
   return (
     <div className="w-full h-fit">
@@ -65,16 +93,29 @@ const Toolbar: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="flex gap-4 flex-wrap">
+          <div className="flex gap-4 flex-wrap relative">
             <div className="w-[230px] flex gap-2.5 px-3 py-2 shadow-shadow_dark">
               <Image src={Search} alt="Search" priority />
               <div className="text-xs font-medium leading-5 text-gray_200">
                 Search client
               </div>
             </div>
-            <Image src={Refresh} alt="Refresh" priority />
-            <Image src={Columns} alt="Columns" priority />
-            <Image src={Download} alt="Download" priority />
+            <div className="flex flex-wrap gap-2.5">
+              <Image src={Refresh} alt="Refresh" priority />
+              <Image
+                src={Columns}
+                alt="Edit Columns"
+                priority
+                onClick={handleEditColumns}
+              />
+              {editColumns && (
+                <EditColumnModal
+                  setEditColumns={setEditColumns}
+                  ref={editColumnRef}
+                />
+              )}
+              <Image src={Download} alt="Download" priority />
+            </div>
           </div>
         </div>
       </div>

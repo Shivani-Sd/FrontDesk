@@ -17,7 +17,23 @@ body {
   box-sizing: border-box;
   font-family: var(--font-geist-sans), sans-serif;
   background-color: rgba(248, 250, 252, 1);
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(248, 250, 252, 1);
+  border-radius: 40px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(226, 232, 240, 1);
+  border-radius: 40px;
 }
 
 .card-border {
