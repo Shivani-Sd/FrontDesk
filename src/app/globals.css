@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("_fonts/HelveticaNeueMedium.otf") format("opentype");
+}
+
+html {
+  overflow: hidden;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  font-family: var(--font-geist-sans), sans-serif;
+  background-color: rgba(248, 250, 252, 1);
+  overflow: auto;
+}
+
+.card-border {
+  border: 1px solid;
+  -moz-border-image: -moz-linear-gradient(bottom, #e2e8f0 0%, #f8fafc 100%);
+  -webkit-border-image: -webkit-linear-gradient(
+    bottom,
+    #e2e8f0 0%,
+    #f8fafc 100%
+  );
+  border-image: linear-gradient(to top, #e2e8f0 0%, #f8fafc 100%);
+  -webkit-border-image-slice: 2;
+  border-image-slice: 2;
+}
+
+.navbar-transition {
+  transition: width 200ms ease-in-out;
+}
