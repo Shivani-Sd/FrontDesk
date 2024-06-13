@@ -7,6 +7,7 @@ import ChevronDownMini from "./chevron-down-mini.svg";
 import ChevronLeft from "./chevron-left.svg";
 import ChevronRight from "./chevron-right.svg";
 import ChevronUp from "./chevron-up.svg";
+import Clear from "./clear.svg";
 import Columns from "./columns.svg";
 import Download from "./download.svg";
 import Filter from "./filter.svg";
@@ -18,11 +19,13 @@ import Inbox from "./inbox.svg";
 import LayoutDashboard from "./layout-dashboard.svg";
 import Open from "./open.svg";
 import Refresh from "./refresh.svg";
-import Search from "./search.svg";
+import Schedule from "./schedule.svg";
+import Selection from "./selection.svg";
 import SplitView from "./split-view.svg";
 import Status from "./status.svg";
 import Subscriptions from "./subscriptions.svg";
 import User from "./user.svg";
+import Users from "./users.svg";
 import UserOutlined from "./user-outlined.svg";
 import Waitlist from "./waitlist.svg";
 
@@ -36,6 +39,7 @@ export {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
+  Clear,
   Columns,
   Download,
   Filter,
@@ -47,11 +51,13 @@ export {
   LayoutDashboard,
   Open,
   Refresh,
-  Search,
+  Schedule,
+  Selection,
   SplitView,
   Status,
   Subscriptions,
   User,
+  Users,
   UserOutlined,
   Waitlist,
 };

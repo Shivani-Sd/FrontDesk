@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
 import { Inter, Poppins } from "next/font/google";
 
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import StoreProvider from "./_StoreProvider";
+import "./globals.css";
+
 const inter = Inter({
-  subsets: ['latin'],
-  variable: '--inter-font',
-  weight: ['400'],
+  subsets: ["latin"],
+  variable: "--inter-font",
+  weight: ["400"],
 });
 
 const poppins = Poppins({
@@ -14,9 +17,6 @@ const poppins = Poppins({
   variable: "--font-poppins",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
-
-import "./globals.css";
-import StoreProvider from "./_StoreProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",

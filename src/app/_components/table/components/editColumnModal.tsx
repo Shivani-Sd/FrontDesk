@@ -14,7 +14,7 @@ import _ from "lodash";
 import { Check } from "@assets";
 import { RootState } from "@store";
 import { TableHeader } from "@types";
-import { setHeaders } from "@features/table/tableSlice";
+import { resetHeaders, setHeaders } from "@features/table/tableSlice";
 
 interface EditColumnModalProps {
   setEditColumns: Dispatch<SetStateAction<boolean>>;
@@ -41,7 +41,7 @@ const GetModalItem = (tableHeaders: TableHeader[], index: number) => {
   return (
     <div className="flex items-center gap-2" key={id}>
       <div
-        className={`w-[14px] h-[14px] min-w-[14px] flex justify-center items-center rounded-[4px] shadow-shadow_gray ${
+        className={`w-[16px] h-[16px] min-w-[16px] flex justify-center rounded-[4px] shadow-shadow_soft ${
           select ? "bg-pitch_black" : "bg-white border border-gray_border "
         }`}
         onClick={handleSelect}
@@ -71,7 +71,7 @@ const EditColumnModal = forwardRef<HTMLDivElement, EditColumnModalProps>(
     };
 
     const handleReset = () => {
-      dispatch(setHeaders(tableHeaders.current));
+      dispatch(resetHeaders());
       setEditColumns(false);
     };
 

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ChevronDownMini, ChevronLeft, ChevronRight, ChevronUp } from "@assets";
 
 interface FooterProps {
+  totalData: number;
   offset: number;
   limit: number;
   setOffset: Dispatch<SetStateAction<number>>;
@@ -11,12 +12,15 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({
+  totalData,
   offset,
   limit,
   setOffset,
   setLimit,
 }) => {
-  const pageButtonOffset = Math.max(1, offset - 2);
+  const totalPages = Math.ceil(totalData / limit)
+  const pageNumber = Math.ceil((offset + limit - 1) / limit);
+  const pageButtonOffset = pageNumber <= 3 ? 1 : pageNumber - 2;
 
   const incrementLimit = () => {
     setLimit((prev) => prev + 1);
@@ -27,11 +31,11 @@ const Footer: React.FC<FooterProps> = ({
   };
 
   const incrementOffset = () => {
-    setOffset((prev) => prev + 1);
+    if (pageNumber !== totalPages) setOffset((prev) => prev + limit);
   };
 
   const decrementOffset = () => {
-    setOffset((prev) => prev - 1);
+    if (pageNumber > 1) setOffset((prev) => prev - limit);
   };
 
   const handleOffset = (offset: number) => {
@@ -56,7 +60,7 @@ const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
         <div className="text-sm text-gray_100 font-medium">
-          out of <span className="text-pitch_black">50</span>
+          out of <span className="text-pitch_black">{totalData}</span>
         </div>
       </div>
       <div className="flex items-center gap-0.5 pr-[70px]">
@@ -73,7 +77,7 @@ const Footer: React.FC<FooterProps> = ({
           (page) => (
             <div
               className={`flex items-center gap-2.5 h-[32px] rounded-md px-3 py-1 font-medium text-xs leading-5 ${
-                offset === page ? "border border-light_border" : ""
+                page === pageNumber ? "border border-light_border" : ""
               }`}
               key={page}
               onClick={() => handleOffset(page)}

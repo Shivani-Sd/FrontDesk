@@ -22,24 +22,6 @@ export enum ServiceStatus {
   Draft = "Draft",
 }
 
-export interface Waitlist {
-  id: number;
-  createdOn: Date;
-  payer: string;
-  status: Status;
-  email: string;
-  payerPhone: string;
-  services: string;
-  serviceType: ServiceType;
-  serviceStatus: ServiceStatus;
-  scheduled: Date;
-}
-
-export interface PaginationProps {
-  offset: number;
-  limit: number;
-}
-
 export enum TableHeaders {
   CreatedOn = "createdOn",
   Payer = "payer",
@@ -70,6 +52,47 @@ export enum TableHeaderDescriptiveValues {
   Scheduled = "Scheduled",
 }
 
+export enum Filters {
+  Scheduled = "Scheduled Date",
+  People = "People",
+  Offerings = "Services / Products",
+}
+
+export enum ScheduledDateFilter {
+  All = "All",
+  Custom = "Custom",
+  LastThirtyDays = "Last 30 days",
+  ThisMonth = "This month",
+  LastMonth = "Last month",
+  ThisQuarter = "This quarter",
+  PastQuarter = "2 quarter ago",
+  ThisYear = "This year",
+  LastYear = "Last year",
+}
+
+export enum ServiceTagFilterAdditionalOptions {
+  ServiceType = "Show all service type",
+  ServiceStatus = "Show all",
+}
+
+export interface Waitlist {
+  id: number;
+  createdOn: Date;
+  payer: string;
+  status: Status;
+  email: string;
+  payerPhone: string;
+  services: string;
+  serviceType: ServiceType;
+  serviceStatus: ServiceStatus;
+  scheduled: Date;
+}
+
+export interface PaginationProps {
+  offset: number;
+  limit: number;
+}
+
 export interface TableHeader {
   id: number;
   name: TableHeaders;
@@ -90,3 +113,38 @@ export interface TableRow {
   services: string;
   scheduled: Date;
 }
+
+export interface Filter {
+  name: Filters;
+  icon: string | StaticImport;
+}
+
+export interface FilterValues {
+  [Filters.Scheduled]: {
+    type: ScheduledDateFilter;
+    startDate: Date | null;
+    endDate: Date | null;
+  };
+  [Filters.People]: {
+    id: number;
+    value: string;
+  }[];
+  [Filters.Offerings]: {
+    filteredValues: {
+      id: number;
+      value: string;
+    }[];
+    serviceType: ServiceTypeFilter;
+    serviceStatus: ServiceStatusFilter;
+  };
+}
+
+export type ServiceTypeFilter =
+  | ServiceType
+  | ServiceTagFilterAdditionalOptions.ServiceType
+  | null;
+
+export type ServiceStatusFilter =
+  | ServiceStatus
+  | ServiceTagFilterAdditionalOptions.ServiceStatus
+  | null;

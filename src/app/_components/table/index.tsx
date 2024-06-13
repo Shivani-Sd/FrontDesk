@@ -1,14 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Image from "next/image";
 import _ from "lodash";
 
 import { Check } from "@assets";
-import {
-  TableHeader,
-  TableRow,
-} from "@types";
+import { TableHeader, TableRow, Waitlist } from "@types";
 import { RootState } from "@store";
 import Row from "./components/row";
 import Footer from "./components/footer";
@@ -41,14 +38,17 @@ const Table: React.FC<TableProps> = ({ sidebarCollapsed }) => {
     (root: RootState) => root.tableSlice.headers
   );
 
-  const waitlists = useSelector((root: RootState) => root.waitlistSlice).map(
-    (waitlist) => ({ ...waitlist, hidden: false })
+  const waitlist = useSelector(
+    (root: RootState) => root.waitlistSlice.filteredWaitlist
   );
 
+  const currentWaitlist = useRef<Waitlist[]>(
+    waitlist.map((waitlist) => ({ ...waitlist, hidden: false }))
+  );
   const [offset, setOffset] = useState<number>(1);
   const [limit, setLimit] = useState<number>(15);
   const [rows, setRows] = useState<TableRow[]>(
-    waitlists.slice(offset - 1, offset + limit - 1)
+    currentWaitlist.current.slice(offset - 1, offset + limit - 1)
   );
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
@@ -57,8 +57,8 @@ const Table: React.FC<TableProps> = ({ sidebarCollapsed }) => {
   };
 
   useEffect(() => {
-    setRows(waitlists.slice(offset - 1, offset + limit - 1));
-  }, [offset, limit]);
+    setRows(waitlist.slice(offset - 1, offset + limit - 1));
+  }, [offset, limit, waitlist]);
 
   return (
     <div
@@ -73,7 +73,7 @@ const Table: React.FC<TableProps> = ({ sidebarCollapsed }) => {
         <div className="w-full h-[67.7vh] rounded-md overflow-auto border border-light_border">
           <div className="flex justify-start items-center gap-4 px-4 py-2 border-b border-dark_border">
             <div
-              className={`w-[14px] h-[14px] min-w-[14px] flex justify-center items-center rounded-[4px] shadow-shadow_gray ${
+              className={`w-[14px] h-[14px] min-w-[14px] flex justify-center items-center rounded-[4px] shadow-shadow_soft ${
                 selectAll
                   ? "bg-pitch_black"
                   : "bg-white border border-gray_border "
@@ -95,6 +95,7 @@ const Table: React.FC<TableProps> = ({ sidebarCollapsed }) => {
         </div>
       </div>
       <Footer
+        totalData={waitlist.length}
         offset={offset}
         limit={limit}
         setOffset={setOffset}

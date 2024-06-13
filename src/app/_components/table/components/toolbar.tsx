@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-import { Columns, Download, Filter, Refresh, Search } from "@assets";
+import { Columns, Download, Filter as FilterIcon, Refresh } from "@assets";
+import Filter from "@components/filter";
+import Search from "@components/assets/search";
 import EditColumnModal from "./editColumnModal";
 
 enum SummaryItemName {
@@ -49,23 +51,34 @@ const getSummaryItems = (summaryItem: SummaryItem) => {
 };
 
 const Toolbar: React.FC = () => {
+  const filterRef = useRef<HTMLDivElement>(null);
   const editColumnRef = useRef<HTMLDivElement>(null);
 
+  const [filter, setFilter] = useState<boolean>(false);
   const [editColumns, setEditColumns] = useState<boolean>(false);
 
   const handleEditColumns = () => {
     setEditColumns((prev) => !prev);
   };
 
+  const handleFilter = () => {
+    setFilter((prev) => !prev);
+  };
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
+        filterRef &&
+        filterRef.current &&
+        !filterRef.current.contains(e.target as Node)
+      )
+        setFilter(false);
+      else if (
         editColumnRef &&
         editColumnRef.current &&
         !editColumnRef.current.contains(e.target as Node)
-      ) {
+      )
         setEditColumns(false);
-      }
     };
 
     document.addEventListener("mousedown", (e) => handleClickOutside(e));
@@ -85,17 +98,24 @@ const Toolbar: React.FC = () => {
           {summaryItems.map((summaryItem) => getSummaryItems(summaryItem))}
         </div>
         <div className="flex items-center flex-wrap justify-between">
-          <div className="w-[599px]">
-            <div className="w-max flex gap-1.5 rounded-md px-3 py-1.5 bg-light_blue">
-              <Image src={Filter} alt="Filter" priority />
+          <div className="w-[599px] relative">
+            <div
+              className="w-max flex gap-1.5 rounded-md px-3 py-1.5 bg-light_blue"
+              onClick={handleFilter}
+            >
+              <Image src={FilterIcon} alt="Filter" priority />
               <div className="text-xs font-medium leading-5 text-left text-smokey_black">
                 Add Filter
               </div>
             </div>
+            {filter && <Filter setFilter={setFilter} ref={filterRef} />}
           </div>
           <div className="flex gap-4 flex-wrap relative">
-            <div className="w-[230px] flex gap-2.5 px-3 py-2 shadow-shadow_dark">
-              <Image src={Search} alt="Search" priority />
+            <div className="w-[230px] flex items-center gap-2.5 px-3 py-2 shadow-shadow_dark">
+              <Search
+                mainProps={{ width: 12, height: 12 }}
+                pathProps={{ stroke: "#64748B", strokeWidth: "1.4" }}
+              />
               <div className="text-xs font-medium leading-5 text-gray_200">
                 Search client
               </div>

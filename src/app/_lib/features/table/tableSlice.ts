@@ -3,26 +3,23 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TableHeader } from "@types";
 import { tableHeaders } from "@constants";
 
-interface Table {
+interface TableSlice {
   headers: TableHeader[];
 }
 
-const initialState: Table = {
+const initialState: TableSlice = {
   headers: tableHeaders,
 };
 
 export const tableSlice = createSlice({
-  name: "waitlist",
+  name: "table",
   initialState,
   reducers: {
     setHeaders: (state, action: PayloadAction<TableHeader[]>) => ({
       ...state,
       headers: action.payload,
     }),
-    resetHeaders: (state) => ({
-      ...state,
-      filteredHeaders: initialState.headers,
-    }),
+    resetHeaders: () => initialState,
   },
 });
 

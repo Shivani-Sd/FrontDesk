@@ -116,7 +116,7 @@ const Row: React.FC<RowProps> = ({ row, tableHeaders, selectAll }) => {
   return (
     <div className="h-[40px] flex justify-start items-center gap-4 px-4 py-2 border-b border-dark_border">
       <div
-        className={`w-[14px] h-[14px] min-w-[14px] flex justify-center items-center rounded-[4px] shadow-shadow_gray ${
+        className={`w-[14px] h-[14px] min-w-[14px] flex justify-center items-center rounded-[4px] shadow-shadow_soft ${
           select ? "bg-pitch_black" : "bg-white border border-gray_border "
         }`}
         onClick={handleSelect}
