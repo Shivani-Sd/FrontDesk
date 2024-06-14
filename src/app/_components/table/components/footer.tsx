@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Dispatch, SetStateAction, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Image from "next/image";
 
+import { RootState } from "@store";
 import ChevronUp from "@assets/chevron-up.svg";
 import ChevronDownMini from "@assets/chevron-down-mini.svg";
 import ChevronLeft from "@assets/chevron-left.svg";
@@ -25,6 +27,10 @@ const Footer: React.FC<FooterProps> = ({
   const totalPages = Math.ceil(totalData / limit);
   const pageNumber = Math.ceil((offset + limit - 1) / limit);
   const pageButtonOffset = pageNumber <= 3 ? 1 : pageNumber - 2;
+
+  const filters = useSelector(
+    (root: RootState) => root.filterSlice.filterValues
+  );
 
   // Functions to handle limit
   const incrementLimit = () => {
@@ -71,6 +77,10 @@ const Footer: React.FC<FooterProps> = ({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [offset, limit]);
+
+  useEffect(() => {
+    setOffset(1);
+  }, [filters]);
 
   return (
     <div

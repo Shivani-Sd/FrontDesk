@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Image from "next/image";
 
 import { Status, TableHeader, TableHeaders, TableRow } from "@types";
 import { formatDate } from "@utils";
+import { RootState } from "@store";
 import Check from "@assets/check.svg";
 import Dot from "@components/assets/dot";
 
@@ -94,6 +96,10 @@ const Row: React.FC<RowProps> = ({
     (tableHeader) => tableHeader.name
   );
 
+  const filters = useSelector(
+    (root: RootState) => root.waitlistSlice.filteredWaitlist
+  );
+
   const [select, setSelect] = useState<boolean>(false);
   const [cells, setCells] = useState<Cell[]>([]);
 
@@ -115,7 +121,7 @@ const Row: React.FC<RowProps> = ({
           }, 200);
       };
     }
-  }, [row, tableHeaders, setRowsLoading]);
+  }, [row, tableHeaders, filters, setRowsLoading]);
 
   const handleSelect = () => {
     setSelect((prev) => !prev);

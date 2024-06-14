@@ -212,28 +212,6 @@ const Filter = forwardRef<HTMLDivElement, FilterProps>(({ setFilter }, ref) => {
     };
   }, [selected]);
 
-  useEffect(() => {
-    // Apply or reset filter based on keyboard input
-    const handleKeyDown = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case "Enter":
-          handleApply();
-          break;
-        case "r":
-          handleReset();
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
   return (
     <div
       className="flex flex-col w-[612px] h-[400px] absolute top-[43px] z-10 rounded-md bg-white shadow-shadow_intense"

@@ -125,7 +125,7 @@ const Toolbar: React.FC = () => {
           {summaryItems.map((summaryItem) => getSummaryItem(summaryItem))}
         </div>
         <div className="flex items-center flex-wrap justify-between">
-          <div className="w-[599px] flex gap-4 relative">
+          <div className="w-[70%] flex gap-4 relative">
             <div
               className="min-w-fit flex gap-1.5 items-center rounded-md px-3 py-1.5 bg-light_blue"
               onClick={handleFilter}
