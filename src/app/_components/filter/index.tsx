@@ -1,4 +1,12 @@
-import { Dispatch, SetStateAction, forwardRef, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import {
+  Dispatch,
+  SetStateAction,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 
@@ -174,6 +182,57 @@ const Filter = forwardRef<HTMLDivElement, FilterProps>(({ setFilter }, ref) => {
       setFilter(false);
     }, 100);
   };
+
+  useEffect(() => {
+    // Navigate through the filter options using keyboard input
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const options = Object.values(Filters);
+      const currentIndex = options.indexOf(selected);
+
+      switch (event.key) {
+        case "ArrowDown":
+          if (currentIndex < options.length - 1) {
+            setSelected(options[currentIndex + 1]);
+          }
+          break;
+        case "ArrowUp":
+          if (currentIndex > 0) {
+            setSelected(options[currentIndex - 1]);
+          }
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selected]);
+
+  useEffect(() => {
+    // Apply or reset filter based on keyboard input
+    const handleKeyDown = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "Enter":
+          handleApply();
+          break;
+        case "r":
+          handleReset();
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div

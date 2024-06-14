@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Dispatch, SetStateAction, useEffect } from "react";
 import Image from "next/image";
 
 import ChevronUp from "@assets/chevron-up.svg";
@@ -46,6 +47,30 @@ const Footer: React.FC<FooterProps> = ({
   const handleOffset = (offset: number) => {
     setOffset(() => limit * (offset - 1) + 1);
   };
+
+  useEffect(() => {
+    // Move to next or previous table data using keyboard input
+    const handleKeyDown = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "ArrowLeft":
+          event.preventDefault();
+          decrementOffset();
+          break;
+        case "ArrowRight":
+          event.preventDefault();
+          incrementOffset();
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [offset, limit]);
 
   return (
     <div

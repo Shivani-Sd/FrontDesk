@@ -102,6 +102,19 @@ const Toolbar: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.key === "f" || event.key === "F") && !filter) setFilter(true);
+      else if (event.key === "Escape" && filter) setFilter(false);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [filter]);
+
   return (
     <div className="w-full h-fit" role="region" aria-label="Waitlist">
       <div className="w-full h-fit px-4 py-3 text-xl font-semibold text-left">
