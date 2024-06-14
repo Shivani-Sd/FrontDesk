@@ -21,9 +21,14 @@ export const waitlistSlice = createSlice({
       ...state,
       filteredWaitlist: action.payload,
     }),
+    resetFilteredWaitlist: (state) => ({
+      ...state,
+      filteredWaitlist: initialState.filteredWaitlist,
+    }),
   },
 });
 
-export const { setFilteredWaitlist } = waitlistSlice.actions;
+export const { setFilteredWaitlist, resetFilteredWaitlist } =
+  waitlistSlice.actions;
 
 export default waitlistSlice.reducer;

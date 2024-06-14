@@ -55,10 +55,12 @@ const OfferingsFilter: React.FC<OfferingsFilterProps> = ({
       selectPlaceholder,
   });
 
+  // Switch between search by name and tags
   const handleChangeFilterMethod = (method: SearchMethod) => {
     setFilterMethod(method);
   };
 
+  // Update current filters with selected service types
   const handleSelectServiceType = (selectedServiceType: ServiceTypeFilter) => {
     const currentFiltersCopy = _.cloneDeep(currentFilters.current);
 
@@ -68,6 +70,7 @@ const OfferingsFilter: React.FC<OfferingsFilterProps> = ({
     setFilterTags((prev) => ({ ...prev, serviceType: selectedServiceType }));
   };
 
+  // Update current filters with selected service status
   const handleSelectServiceStatus = (
     selectedServiceStatus: ServiceStatusFilter
   ) => {
@@ -82,6 +85,7 @@ const OfferingsFilter: React.FC<OfferingsFilterProps> = ({
     }));
   };
 
+  // Update current filters with selected services
   const updateCurrentFilters = (
     selectedServices: {
       id: number;
@@ -94,6 +98,7 @@ const OfferingsFilter: React.FC<OfferingsFilterProps> = ({
     currentFilters.current = currentFiltersCopy;
   };
 
+  // Show service type and service status next to the search result
   const getChips = (searchItem: SearchItem) => {
     const item = waitlist.find((item) => searchItem.id === item.id);
 

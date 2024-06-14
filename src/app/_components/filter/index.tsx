@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  forwardRef,
-  useRef,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, forwardRef, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 
@@ -91,6 +85,7 @@ const Filter = forwardRef<HTMLDivElement, FilterProps>(({ setFilter }, ref) => {
 
   const [selected, setSelected] = useState<Filters>(Filters.Scheduled);
 
+  // Object literal mapping chosen date filter with corresponding functions
   const filterMethods = {
     [ScheduledDateFilterEnum.All]: () => waitlist,
     [ScheduledDateFilterEnum.Custom]: () =>
@@ -114,6 +109,7 @@ const Filter = forwardRef<HTMLDivElement, FilterProps>(({ setFilter }, ref) => {
   };
 
   const handleApply = () => {
+    // Filter according to chosen scheduled date
     let newFilteredWaitlist =
       filterMethods[currentFilters.current[Filters.Scheduled].type]();
 
@@ -125,6 +121,7 @@ const Filter = forwardRef<HTMLDivElement, FilterProps>(({ setFilter }, ref) => {
     const selectedServiceStatus =
       currentFilters.current[Filters.Offerings].serviceStatus;
 
+    // Filter according to selected names
     if (selectedPeople.length) {
       const ids = selectedPeople.map((item) => item.id);
 
@@ -133,6 +130,7 @@ const Filter = forwardRef<HTMLDivElement, FilterProps>(({ setFilter }, ref) => {
       );
     }
 
+    // Filter according to selected service names
     if (selectedServiceNames.length) {
       const ids = selectedServiceNames.map((item) => item.id);
 
@@ -140,7 +138,7 @@ const Filter = forwardRef<HTMLDivElement, FilterProps>(({ setFilter }, ref) => {
         ids.includes(item.id)
       );
     }
-
+    // Filter according to selected service types
     if (
       selectedServiceType &&
       selectedServiceType !== ServiceTagFilterAdditionalOptions.ServiceType
@@ -150,6 +148,7 @@ const Filter = forwardRef<HTMLDivElement, FilterProps>(({ setFilter }, ref) => {
       );
     }
 
+    // Filter according to selected service status
     if (
       selectedServiceStatus &&
       selectedServiceStatus !== ServiceTagFilterAdditionalOptions.ServiceStatus
@@ -159,21 +158,29 @@ const Filter = forwardRef<HTMLDivElement, FilterProps>(({ setFilter }, ref) => {
       );
     }
 
+    // Update store with the new filter values and filtered data
     dispatch(setFilters(currentFilters.current));
     dispatch(setFilteredWaitlist(newFilteredWaitlist));
-    setFilter(false);
+    setTimeout(() => {
+      setFilter(false);
+    }, 100);
   };
 
+  // Reset filters
   const handleReset = () => {
     dispatch(resetFilters());
     dispatch(setFilteredWaitlist(waitlist));
-    setFilter(false);
+    setTimeout(() => {
+      setFilter(false);
+    }, 100);
   };
 
   return (
     <div
-      className="flex flex-col w-[612px] h-[400px] absolute top-[46px] z-10 rounded-md bg-white shadow-shadow_intense"
+      className="flex flex-col w-[612px] h-[400px] absolute top-[43px] z-10 rounded-md bg-white shadow-shadow_intense"
       ref={ref}
+      role="dialog"
+      aria-labelledby="filter-dialog"
     >
       <div className="flex h-full">
         <div className="w-[230px] h-full rounded-tl-md p-2 border-r border-light_border">
@@ -189,18 +196,22 @@ const Filter = forwardRef<HTMLDivElement, FilterProps>(({ setFilter }, ref) => {
       </div>
       <div className="flex justify-end gap-6 w-[612px] px-4 py-2 border-t border-light_border">
         <div className="flex gap-4">
-          <div
-            className="h-[36px] flex items-center px-4 py-2 rounded-md bg-gray_400 shadow-shadow_minimal text-sm leading-6 text-jet_black font-medium"
+          <button
+            className="h-[36px] flex items-center px-4 py-2 rounded-md bg-gray_400 shadow-shadow_minimal text-sm leading-6 text-jet_black font-medium button"
             onClick={handleReset}
+            role="button"
+            aria-label="Reset to Default"
           >
             Reset to Default
-          </div>
-          <div
-            className="h-[36px] flex items-center px-4 py-2 rounded-md shadow-shadow_dark bg-pitch_black text-white"
+          </button>
+          <button
+            className="h-[36px] flex items-center px-4 py-2 rounded-md shadow-shadow_dark bg-pitch_black text-white button"
             onClick={handleApply}
+            role="button"
+            aria-label="Apply Changes"
           >
             Apply
-          </div>
+          </button>
         </div>
       </div>
     </div>

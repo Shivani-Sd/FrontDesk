@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
-
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+
 import StoreProvider from "./_StoreProvider";
 import "./globals.css";
 
@@ -15,7 +15,7 @@ const inter = Inter({
 const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["600"],
 });
 
 export const metadata: Metadata = {

@@ -11,8 +11,9 @@ import {
 } from "react";
 import Image from "next/image";
 
-import { Check, Clear } from "@assets";
 import SearchIcon from "@components/assets/search";
+import Check from "@assets/check.svg";
+import Clear from "@assets/clear.svg";
 import useDebounce from "@hooks/useDebounce";
 
 interface SearchProps {
@@ -70,6 +71,9 @@ const GetSearchResult = ({
               : "bg-white border border-gray_border "
           }`}
           onClick={handleSelect}
+          role="checkbox"
+          aria-checked={select}
+          aria-label={select ? "Deselect item" : "Select item"}
         >
           {searchActive && select && <Image src={Check} alt="Check" />}
         </div>
@@ -105,6 +109,7 @@ const Search: React.FC<SearchProps> = ({
     setValue(e.target.value);
   };
 
+  // Filter, sort and slice values according to the search text
   const handleSearch = () => {
     if (value)
       setItems(
@@ -122,6 +127,7 @@ const Search: React.FC<SearchProps> = ({
   };
 
   useEffect(() => {
+    // Perform debounced search with 200ms delay
     debounce(handleSearch, 200);
   }, [value]);
 
@@ -134,18 +140,29 @@ const Search: React.FC<SearchProps> = ({
       <div className="w-[350px] h-fit flex items-center gap-2 px-3 py-1 rounded-md border border-light_border">
         <SearchIcon />
         <input
+          type="text"
           placeholder={placeholder}
           value={value}
           className={`w-full text-xs leading-5 text-md focus:outline-none text-${
             value ? "charcoal_black" : "gray_200"
           }`}
           onChange={handleChange}
+          aria-label="Search"
         />
-        <Image src={Clear} alt="Clear" onClick={handleClearSearch} />
+        <Image
+          src={Clear}
+          alt="Clear"
+          onClick={handleClearSearch}
+          aria-label="Clear search"
+        />
       </div>
+
       {value && items.length ? (
         <div className="flex flex-col gap-3">
-          <div className="text-xs font-normal leading-5 text-light_black">
+          <div
+            className="text-xs font-normal leading-5 text-light_black"
+            aria-live="polite"
+          >
             Showing {items.length} results matching &lsquo;{value}&rsquo;
           </div>
           <div className="w-[350px] flex flex-col gap-2">
@@ -156,7 +173,7 @@ const Search: React.FC<SearchProps> = ({
                 searchActive
                 chips={chips}
                 setSelectedItems={setSelectedItems}
-                key={`${item}${index}`}
+                key={`${item.id}-${index}`}
               />
             ))}
           </div>
@@ -169,7 +186,7 @@ const Search: React.FC<SearchProps> = ({
             searchActive={false}
             chips={chips}
             setSelectedItems={setSelectedItems}
-            key={`${item}${index}`}
+            key={`${item.id}-${index}`}
           />
         ))
       ) : (

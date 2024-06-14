@@ -5,10 +5,8 @@ import Image from "next/image";
 import {
   ArrowLeftRight,
   Calendar,
-  ChevronDown,
   FrontDeskLogo,
   Globe,
-  Help,
   Inbox,
   LayoutDashboard,
   Open,
@@ -17,6 +15,8 @@ import {
   User,
   Waitlist,
 } from "@assets";
+import ChevronDown from "@assets/chevron-down.svg";
+import Help from "@assets/help.svg";
 
 interface SidebarProps {
   setSidebarCollapsed: Dispatch<SetStateAction<boolean>>;
@@ -63,11 +63,13 @@ const Sidebar: React.FC<SidebarProps> = ({ setSidebarCollapsed }) => {
     setSelectedItem(item);
   };
 
+  // Collapse sidebar
   const handleShowMiniBar = () => {
     setShowMiniSidebar((prev) => !prev);
     setSidebarCollapsed((prev) => !prev);
   };
 
+  // Function to render sidebar options
   const getSidebarItem = (sidebarItem: SidebarItem) => {
     const { name, icon } = sidebarItem;
 
@@ -92,11 +94,14 @@ const Sidebar: React.FC<SidebarProps> = ({ setSidebarCollapsed }) => {
       className={`h-[100vh] flex flex-col justify-start gap-2 bg-sky_blue navbar-transition fixed ${
         showMiniSidebar ? "w-[64px]" : "w-[228px]"
       }`}
+      role="navigation"
+      aria-label="Main Navigation"
     >
       <div
         className={`h-[64px] p-2 ${
           showMiniSidebar ? "flex justify-center" : ""
         }`}
+        role="banner"
       >
         <div
           className={`w-full p-2 pr-0 flex items-center navbar-transition ${
@@ -113,6 +118,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setSidebarCollapsed }) => {
                 src={SplitView}
                 alt="Split View"
                 onClick={handleShowMiniBar}
+                role="button"
+                aria-label="Toggle Sidebar"
               />
             </>
           )}
@@ -139,6 +146,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setSidebarCollapsed }) => {
                   ? "justify-center w-[48px] h-[56px]"
                   : "justify-between w-[212px]"
               }`}
+              role="button"
+              aria-label="Location Details"
             >
               {!showMiniSidebar && (
                 <div className="text-xs leading-5 text-smokey_black font-medium">
@@ -195,11 +204,11 @@ const Sidebar: React.FC<SidebarProps> = ({ setSidebarCollapsed }) => {
         </div>
         <div
           className={`w-full flex items-center py-1.5 px-2
-              ${
-                showMiniSidebar
-                  ? "h-[32px] justify-center"
-                  : "justify-between gap-2"
-              }`}
+          ${
+            showMiniSidebar
+              ? "h-[32px] justify-center"
+              : "justify-between gap-2"
+          }`}
         >
           {!showMiniSidebar && (
             <div className="flex items-center gap-2">

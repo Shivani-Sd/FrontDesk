@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-import { Selection } from "@assets";
+import Selection from "@assets/selection.svg";
 
 interface SelectProps {
   options: string[];
@@ -78,6 +78,8 @@ const Select: React.FC<SelectProps> = ({
           open ? "rounded-lg border-gray_100" : "border-transparent"
         }`}
         ref={anchorRef}
+        aria-haspopup="listbox"
+        aria-expanded={open}
       >
         <div className="w-full h-[36px] flex justify-between gap-2 px-3 py-2 rounded-md border border-dark_grey_border shadow-shadow_minimal">
           <div className={`font-normal text-sm text-smokey_black`}>{value}</div>
@@ -88,6 +90,7 @@ const Select: React.FC<SelectProps> = ({
               viewBox="0 0 17 16"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
             >
               <path
                 d="M4.5 6L8.5 10L12.5 6"
@@ -101,8 +104,10 @@ const Select: React.FC<SelectProps> = ({
       </div>
       {open && (
         <div
-          className="w-full absolute max-h-[232px] overflow-y-auto p-1 bg-white rounded-md border border-dark_grey_border shadow-shadow_dark top-[66px] z-10"
+          className="w-full absolute max-h-[232px] overflow-y-auto p-1 bg-white rounded-md border border-dark_grey_border shadow-shadow_dark top-[66px] z-10 animate-dropdown"
           ref={menuRef}
+          role="listbox"
+          aria-labelledby={label}
         >
           {options.map((option) =>
             getSelectItem(option, value, handleSelectValue)

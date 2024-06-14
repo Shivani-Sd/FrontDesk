@@ -1,16 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
-import { Check } from "@assets";
 import { Status, TableHeader, TableHeaders, TableRow } from "@types";
 import { formatDate } from "@utils";
+import Check from "@assets/check.svg";
 import Dot from "@components/assets/dot";
 
 interface RowProps {
+  index: number;
   row: TableRow;
   tableHeaders: TableHeader[];
   selectAll: boolean;
+  rowsLoading: boolean;
+  setRowsLoading?: Dispatch<SetStateAction<boolean>>;
 }
 
 interface Cell {
@@ -64,6 +67,7 @@ const getTableCell = (cell: Cell) => {
         display: `${hidden ? "none" : "flex"}`,
       }}
       key={`${id}: ${value}`}
+      role="cell"
     >
       <div
         className={`text-xs font-medium leading-5 text-dark_black ${chip}`}
@@ -78,31 +82,39 @@ const getTableCell = (cell: Cell) => {
   );
 };
 
-const Row: React.FC<RowProps> = ({ row, tableHeaders, selectAll }) => {
+const Row: React.FC<RowProps> = ({
+  index,
+  row,
+  tableHeaders,
+  selectAll,
+  rowsLoading,
+  setRowsLoading,
+}) => {
   const tableHeaderNames: TableHeaders[] = tableHeaders.map(
     (tableHeader) => tableHeader.name
   );
 
   const [select, setSelect] = useState<boolean>(false);
+  const [cells, setCells] = useState<Cell[]>([]);
 
-  const cells = useMemo(() => {
-    let cells: Cell[] = [];
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.Worker) {
+      const worker = new Worker(new URL("src/app/_worker.js", import.meta.url));
 
-    Object.keys(row).forEach((cell) => {
-      if (tableHeaderNames.includes(cell as TableHeaders)) {
-        const tableHeader = tableHeaders.find(
-          (tableHeader) => tableHeader.name === cell
-        );
+      worker.postMessage({ row, tableHeaders, tableHeaderNames });
 
-        if (tableHeader)
-          cells.push({
-            value: row[cell as keyof TableRow],
-            header: tableHeader,
-          });
-      }
-    });
+      worker.addEventListener("message", (event) => {
+        setCells(event.data);
+      });
 
-    return cells;
+      return () => {
+        worker.terminate();
+        if (setRowsLoading)
+          setTimeout(() => {
+            setRowsLoading(false);
+          }, 200);
+      };
+    }
   }, [row, tableHeaders]);
 
   const handleSelect = () => {
@@ -114,16 +126,35 @@ const Row: React.FC<RowProps> = ({ row, tableHeaders, selectAll }) => {
   }, [selectAll]);
 
   return (
-    <div className="h-[40px] flex justify-start items-center gap-4 px-4 py-2 border-b border-dark_border">
-      <div
-        className={`w-[14px] h-[14px] min-w-[14px] flex justify-center items-center rounded-[4px] shadow-shadow_soft ${
-          select ? "bg-pitch_black" : "bg-white border border-gray_border "
-        }`}
-        onClick={handleSelect}
-      >
-        {select && <Image src={Check} alt="Check" />}
-      </div>
-      {cells.map((cell) => getTableCell(cell))}
+    <div
+      className={`h-[40px] flex justify-start items-center gap-4 px-4 py-2 ${
+        !rowsLoading ? "border-b border-dark_border" : ""
+      }`}
+      role="row"
+      aria-rowindex={index + 1}
+    >
+      {!rowsLoading && (
+        <>
+          <div role="cell">
+            <div
+              className={`w-[14px] h-[14px] min-w-[14px] flex justify-center items-center rounded-[4px] shadow-shadow_soft ${
+                select
+                  ? "bg-pitch_black"
+                  : "bg-white border border-gray_border "
+              }`}
+              onClick={handleSelect}
+              role="checkbox"
+              aria-checked={select}
+              aria-label={select ? "Deselect row" : "Select row"}
+            >
+              {select && (
+                <Image src={Check} alt="Check" width={12} height={12} />
+              )}
+            </div>
+          </div>
+          {cells.map((cell) => getTableCell(cell))}
+        </>
+      )}
     </div>
   );
 };

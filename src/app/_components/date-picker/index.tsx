@@ -3,7 +3,9 @@ import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import Image from "next/image";
 
-import { Schedule, ChevronLeft, ChevronRight } from "@assets";
+import { Schedule } from "@assets";
+import ChevronLeft from "@assets/chevron-left.svg";
+import ChevronRight from "@assets/chevron-right.svg";
 
 interface DatePickerProps {
   initialValue: Date | null;

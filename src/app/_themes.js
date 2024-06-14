@@ -39,6 +39,30 @@ const fontFamily = {
   poppins: ["var(--font-poppins)"],
 };
 
-const themes = { boxShadow, colors, fontFamily };
+const keyframes = {
+  dropdown: {
+    "0%": {
+      height: "0%",
+    },
+    "100%": {
+      height: "100%",
+    },
+  },
+  spin: {
+    "0%": {
+      transform: "rotate(0deg)",
+    },
+    "100%": {
+      transform: "rotate(360deg)",
+    },
+  },
+};
+
+const animation = {
+  dropdown: "dropdown 100ms linear",
+  spin: "spin linear 1s infinite",
+};
+
+const themes = { boxShadow, colors, fontFamily, keyframes, animation };
 
 export default themes;

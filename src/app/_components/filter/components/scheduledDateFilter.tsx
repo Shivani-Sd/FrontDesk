@@ -25,17 +25,20 @@ const ScheduledDateFilter: React.FC<ScheduledDateFilterProps> = ({
     currentFilter || filters[0]
   );
 
+  // Update chosen filter
   const handleSelect = (filter: ScheduledDateFilterEnum) => {
     currentFiltersCopy[Filters.Scheduled].type = filter;
     currentFilters.current = currentFiltersCopy;
     setFilter(filter);
   };
 
+  // Update current filters with selected start date
   const handleStartDateChange = (value: Date) => {
     currentFiltersCopy[Filters.Scheduled].startDate = value;
     currentFilters.current = currentFiltersCopy;
   };
 
+  // Update current filters with selected end date
   const handleEndDateChange = (value: Date) => {
     currentFiltersCopy[Filters.Scheduled].endDate = value;
     currentFilters.current = currentFiltersCopy;
@@ -48,26 +51,35 @@ const ScheduledDateFilter: React.FC<ScheduledDateFilterProps> = ({
         label={"Show orders for"}
         value={filter}
         handleSelect={handleSelect}
+        aria-label="Filter orders by"
       />
       <div className="flex items-center gap-[19px]">
         <div className="w-[163px] max-h-[68px] flex flex-col gap-1 relative">
-          <div className="font-medium text-xs leading-5 text-smokey_black pb-0.5">
+          <div
+            className="font-medium text-xs leading-5 text-smokey_black pb-0.5"
+            id="from-label"
+          >
             From
           </div>
           <DatePicker
             initialValue={currentFilters.current[Filters.Scheduled].startDate}
             disabled={filter !== ScheduledDateFilterEnum.Custom}
             handleChange={handleStartDateChange}
+            aria-labelledby="from-label"
           />
         </div>
         <div className="w-[163px] max-h-[68px] flex flex-col gap-1 relative">
-          <div className="font-medium text-xs leading-5 text-smokey_black pb-0.5">
+          <div
+            className="font-medium text-xs leading-5 text-smokey_black pb-0.5"
+            id="to-label"
+          >
             To
           </div>
           <DatePicker
             initialValue={currentFilters.current[Filters.Scheduled].endDate}
             disabled={filter !== ScheduledDateFilterEnum.Custom}
             handleChange={handleEndDateChange}
+            aria-labelledby="to-label"
           />
         </div>
       </div>

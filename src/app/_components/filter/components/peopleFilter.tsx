@@ -31,6 +31,7 @@ const PeopleFilter: React.FC<PeopleFilterProps> = ({ currentFilters }) => {
     waitlist.map((item) => ({ id: item.id, value: item.payer }))
   );
 
+  // Update current filters with selected values
   const updateCurrentFilters = (
     selectedPeople: {
       id: number;

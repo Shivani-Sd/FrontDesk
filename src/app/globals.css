@@ -38,6 +38,11 @@ body {
   border-radius: 40px;
 }
 
+.button:active {
+  opacity: 0;
+  transition: opacity 1s;
+}
+
 .card-border {
   border: 1px solid;
   -moz-border-image: -moz-linear-gradient(bottom, #e2e8f0 0%, #f8fafc 100%);

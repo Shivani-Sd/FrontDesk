@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
 import { Columns, Download, Filter as FilterIcon, Refresh } from "@assets";
+import { RootState } from "@store";
 import Filter from "@components/filter";
 import Search from "@components/assets/search";
-import EditColumnModal from "./editColumnModal";
+import EditColumnsModal from "./editColumnsModal";
+
+const FilterChip = dynamic(() => import("./filterChip"));
 
 enum SummaryItemName {
   Waitlists = "All Waitlists",
@@ -32,7 +37,7 @@ const summaryItems: SummaryItem[] = [
   },
 ];
 
-const getSummaryItems = (summaryItem: SummaryItem) => {
+const getSummaryItem = (summaryItem: SummaryItem) => {
   const { name, count } = summaryItem;
 
   return (
@@ -51,6 +56,12 @@ const getSummaryItems = (summaryItem: SummaryItem) => {
 };
 
 const Toolbar: React.FC = () => {
+  const filtered = useSelector((root: RootState) => root.filterSlice.filtered);
+
+  const filterValues = useSelector(
+    (root: RootState) => root.waitlistSlice.filteredWaitlist
+  );
+
   const filterRef = useRef<HTMLDivElement>(null);
   const editColumnRef = useRef<HTMLDivElement>(null);
 
@@ -58,14 +69,17 @@ const Toolbar: React.FC = () => {
   const [editColumns, setEditColumns] = useState<boolean>(false);
 
   const handleEditColumns = () => {
+    // Open or close edit columns modal
     setEditColumns((prev) => !prev);
   };
 
   const handleFilter = () => {
+    // Open or close filter modal
     setFilter((prev) => !prev);
   };
 
   useEffect(() => {
+    // Close filter or edit columns modal if user clicks anywhere outside
     const handleClickOutside = (e: MouseEvent) => {
       if (
         filterRef &&
@@ -89,25 +103,37 @@ const Toolbar: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full h-fit">
+    <div className="w-full h-fit" role="region" aria-label="Waitlist">
       <div className="w-full h-fit px-4 py-3 text-xl font-semibold text-left">
         Waitlist
       </div>
       <div className="flex flex-col gap-4 px-4 py-3">
         <div className="max-w-[1108px] min-h-[40px] flex flex-wrap gap-[15px] justify-between">
-          {summaryItems.map((summaryItem) => getSummaryItems(summaryItem))}
+          {summaryItems.map((summaryItem) => getSummaryItem(summaryItem))}
         </div>
         <div className="flex items-center flex-wrap justify-between">
-          <div className="w-[599px] relative">
+          <div className="w-[599px] flex gap-4 relative">
             <div
-              className="w-max flex gap-1.5 rounded-md px-3 py-1.5 bg-light_blue"
+              className="min-w-fit flex gap-1.5 items-center rounded-md px-3 py-1.5 bg-light_blue"
               onClick={handleFilter}
+              role="button"
+              aria-label="Open Filter"
             >
               <Image src={FilterIcon} alt="Filter" priority />
               <div className="text-xs font-medium leading-5 text-left text-smokey_black">
                 Add Filter
               </div>
             </div>
+            {filtered && (
+              <div className="flex gap-4 overflow-x-auto">
+                {filterValues.map((filterValue, index) => (
+                  <FilterChip
+                    filterValue={filterValue}
+                    key={`${index}${filterValue.id}`}
+                  />
+                ))}
+              </div>
+            )}
             {filter && <Filter setFilter={setFilter} ref={filterRef} />}
           </div>
           <div className="flex gap-4 flex-wrap relative">
@@ -127,9 +153,11 @@ const Toolbar: React.FC = () => {
                 alt="Edit Columns"
                 priority
                 onClick={handleEditColumns}
+                role="button"
+                aria-label="Edit Columns"
               />
               {editColumns && (
-                <EditColumnModal
+                <EditColumnsModal
                   setEditColumns={setEditColumns}
                   ref={editColumnRef}
                 />

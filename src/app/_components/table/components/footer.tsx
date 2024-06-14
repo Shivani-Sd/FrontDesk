@@ -1,7 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 
-import { ChevronDownMini, ChevronLeft, ChevronRight, ChevronUp } from "@assets";
+import ChevronUp from "@assets/chevron-up.svg";
+import ChevronDownMini from "@assets/chevron-down-mini.svg";
+import ChevronLeft from "@assets/chevron-left.svg";
+import ChevronRight from "@assets/chevron-right.svg";
 
 interface FooterProps {
   totalData: number;
@@ -18,10 +21,11 @@ const Footer: React.FC<FooterProps> = ({
   setOffset,
   setLimit,
 }) => {
-  const totalPages = Math.ceil(totalData / limit)
+  const totalPages = Math.ceil(totalData / limit);
   const pageNumber = Math.ceil((offset + limit - 1) / limit);
   const pageButtonOffset = pageNumber <= 3 ? 1 : pageNumber - 2;
 
+  // Functions to handle limit
   const incrementLimit = () => {
     setLimit((prev) => prev + 1);
   };
@@ -30,6 +34,7 @@ const Footer: React.FC<FooterProps> = ({
     setLimit((prev) => prev - 1);
   };
 
+  // Functions to handle offset
   const incrementOffset = () => {
     if (pageNumber !== totalPages) setOffset((prev) => prev + limit);
   };
@@ -39,23 +44,41 @@ const Footer: React.FC<FooterProps> = ({
   };
 
   const handleOffset = (offset: number) => {
-    setOffset(offset);
+    setOffset(() => limit * (offset - 1) + 1);
   };
 
   return (
-    <div className="w-full flex justify-between flex-wrap px-4 py-3">
+    <div
+      className="w-full flex justify-between flex-wrap px-4 py-3"
+      role="navigation"
+      aria-label="Pagination"
+    >
       <div className="flex items-center gap-0.5">
         <div className="text-sm text-gray_100 font-normal">Displaying</div>
-        <div className="flex items-center gap-1.5 rounded-md px-3 py-1 bg-sky_blue">
-          <div className="text-sm text-smokey_black font-inter leading-6 font-normal">
+        <div
+          className="flex items-center gap-1.5 rounded-md px-3 py-1 bg-sky_blue"
+          role="status"
+        >
+          <div
+            className="text-sm text-smokey_black font-inter leading-6 font-normal"
+            aria-live="polite"
+          >
             {limit}
           </div>
           <div className="w-[16px] flex flex-col items-center">
-            <Image src={ChevronUp} alt="Chevron Up" onClick={incrementLimit} />
+            <Image
+              src={ChevronUp}
+              alt="Increase Limit"
+              onClick={incrementLimit}
+              role="button"
+              aria-label="Increase Limit"
+            />
             <Image
               src={ChevronDownMini}
-              alt="Chevron Down"
+              alt="Decrease Limit"
               onClick={decrementLimit}
+              role="button"
+              aria-label="Decrease Limit"
             />
           </div>
         </div>
@@ -64,11 +87,14 @@ const Footer: React.FC<FooterProps> = ({
         </div>
       </div>
       <div className="flex items-center gap-0.5 pr-[70px]">
-        <div
-          className="flex items-center gap-2 px-2 py-1 rounded-md"
-          onClick={decrementOffset}
-        >
-          <Image src={ChevronLeft} alt="Chevron Left" />
+        <div className="flex items-center gap-2 px-2 py-1 rounded-md">
+          <Image
+            src={ChevronLeft}
+            alt="Previous Page"
+            onClick={decrementOffset}
+            role="button"
+            aria-label="Previous Page"
+          />
           <div className="text-xs text-smokey_black font-medium leading-5">
             Previous
           </div>
@@ -81,19 +107,24 @@ const Footer: React.FC<FooterProps> = ({
               }`}
               key={page}
               onClick={() => handleOffset(page)}
+              role="button"
+              aria-label={`Page ${page}`}
             >
               {page}
             </div>
           )
         )}
-        <div
-          className="flex items-center gap-2 px-2 py-1 rounded-md"
-          onClick={incrementOffset}
-        >
+        <div className="flex items-center gap-2 px-2 py-1 rounded-md">
           <div className="text-xs text-smokey_black font-medium leading-5">
             Next
           </div>
-          <Image src={ChevronRight} alt="Chevron Right" />
+          <Image
+            src={ChevronRight}
+            alt="Next Page"
+            onClick={incrementOffset}
+            role="button"
+            aria-label="Next Page"
+          />
         </div>
       </div>
     </div>

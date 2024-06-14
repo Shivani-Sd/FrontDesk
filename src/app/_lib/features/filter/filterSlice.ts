@@ -4,6 +4,7 @@ import { Filters, FilterValues, ScheduledDateFilter } from "@types";
 
 interface FilterSlice {
   filterValues: FilterValues;
+  filtered: boolean;
 }
 
 const initialState: FilterSlice = {
@@ -20,19 +21,20 @@ const initialState: FilterSlice = {
       serviceStatus: null,
     },
   },
+  filtered: false,
 };
 
 export const filterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
-    setFilters: (state, action: PayloadAction<FilterValues>) => ({
-      ...state,
+    setFilters: (_, action: PayloadAction<FilterValues>) => ({
       filterValues: action.payload,
+      filtered: true,
     }),
-    resetFilters: (state) => ({
-      ...state,
+    resetFilters: () => ({
       filterValues: initialState.filterValues,
+      filtered: false,
     }),
   },
 });

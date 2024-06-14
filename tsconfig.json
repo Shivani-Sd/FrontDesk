@@ -20,6 +20,7 @@
     "baseUrl": ".",
     "paths": {
       "@assets": ["src/app/_assets/index"],
+      "@assets/*": ["src/app/_assets/*"],
       "@components/*": ["src/app/_components/*"],
       "@constants": ["src/app/_constants"],
       "@features/*": ["src/app/_lib/features/*"],
