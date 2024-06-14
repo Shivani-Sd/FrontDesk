@@ -115,7 +115,7 @@ const Row: React.FC<RowProps> = ({
           }, 200);
       };
     }
-  }, [row, tableHeaders]);
+  }, [row, tableHeaders, setRowsLoading]);
 
   const handleSelect = () => {
     setSelect((prev) => !prev);
