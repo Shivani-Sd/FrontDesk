@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import Image from "next/image";
 
 import { Status, TableHeader, TableHeaders, TableRow } from "@types";
-import { formatDate } from "@utils";
+import { formatDate, isValidDate } from "@utils";
 import { RootState } from "@store";
 import Check from "@assets/check.svg";
 import Dot from "@components/assets/dot";
@@ -19,7 +19,7 @@ interface RowProps {
 }
 
 interface Cell {
-  value: string | number | boolean | Date;
+  value: string | number | boolean;
   header: TableHeader;
 }
 
@@ -57,9 +57,8 @@ const getTableCell = (cell: Cell) => {
     color = statusColorObject.color;
   }
 
-  if (value instanceof Date) {
-    date = formatDate(value);
-  }
+  if (typeof value === "string" && isValidDate(value))
+    date = formatDate(new Date(value));
 
   return (
     <div
@@ -96,7 +95,7 @@ const Row: React.FC<RowProps> = ({
     (tableHeader) => tableHeader.name
   );
 
-  const filters = useSelector(
+  const filteredWaitlist = useSelector(
     (root: RootState) => root.waitlistSlice.filteredWaitlist
   );
 
@@ -104,24 +103,23 @@ const Row: React.FC<RowProps> = ({
   const [cells, setCells] = useState<Cell[]>([]);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.Worker) {
+    if (typeof window !== "undefined" && window.Worker && rowsLoading) {
       const worker = new Worker(new URL("src/app/_worker.js", import.meta.url));
 
       worker.postMessage({ row, tableHeaders, tableHeaderNames });
 
       worker.addEventListener("message", (event) => {
         setCells(event.data);
-      });
 
-      return () => {
-        worker.terminate();
         if (setRowsLoading)
           setTimeout(() => {
             setRowsLoading(false);
           }, 200);
-      };
+      });
+
+      return () => worker.terminate();
     }
-  }, [row, tableHeaders, filters, setRowsLoading]);
+  }, [tableHeaders, rowsLoading]);
 
   const handleSelect = () => {
     setSelect((prev) => !prev);

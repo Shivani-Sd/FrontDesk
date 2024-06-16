@@ -18,11 +18,11 @@ const ScheduledDateFilter: React.FC<ScheduledDateFilterProps> = ({
   currentFilters,
 }) => {
   const filters = Object.values(ScheduledDateFilterEnum);
-  const currentFilter = currentFilters.current[Filters.Scheduled].type;
+  const currentFilter = currentFilters.current[Filters.Scheduled];
   const currentFiltersCopy = _.cloneDeep(currentFilters.current);
 
   const [filter, setFilter] = useState<ScheduledDateFilterEnum>(
-    currentFilter || filters[0]
+    currentFilter.type || filters[0]
   );
 
   // Update chosen filter
@@ -34,13 +34,13 @@ const ScheduledDateFilter: React.FC<ScheduledDateFilterProps> = ({
 
   // Update current filters with selected start date
   const handleStartDateChange = (value: Date) => {
-    currentFiltersCopy[Filters.Scheduled].startDate = value;
+    currentFiltersCopy[Filters.Scheduled].startDate = value.toISOString();
     currentFilters.current = currentFiltersCopy;
   };
 
   // Update current filters with selected end date
   const handleEndDateChange = (value: Date) => {
-    currentFiltersCopy[Filters.Scheduled].endDate = value;
+    currentFiltersCopy[Filters.Scheduled].endDate = value.toISOString();
     currentFilters.current = currentFiltersCopy;
   };
 
@@ -62,7 +62,9 @@ const ScheduledDateFilter: React.FC<ScheduledDateFilterProps> = ({
             From
           </div>
           <DatePicker
-            initialValue={currentFilters.current[Filters.Scheduled].startDate}
+            initialValue={
+              currentFilter.startDate ? new Date(currentFilter.startDate) : null
+            }
             disabled={filter !== ScheduledDateFilterEnum.Custom}
             handleChange={handleStartDateChange}
             aria-labelledby="from-label"
@@ -76,7 +78,9 @@ const ScheduledDateFilter: React.FC<ScheduledDateFilterProps> = ({
             To
           </div>
           <DatePicker
-            initialValue={currentFilters.current[Filters.Scheduled].endDate}
+            initialValue={
+              currentFilter.endDate ? new Date(currentFilter.endDate) : null
+            }
             disabled={filter !== ScheduledDateFilterEnum.Custom}
             handleChange={handleEndDateChange}
             aria-labelledby="to-label"

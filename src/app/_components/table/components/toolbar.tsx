@@ -25,7 +25,7 @@ interface SummaryItem {
 const summaryItems: SummaryItem[] = [
   {
     name: SummaryItemName.Waitlists,
-    count: 100,
+    count: 80,
   },
   {
     name: SummaryItemName.NewlyAdded,

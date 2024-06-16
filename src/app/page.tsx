@@ -6,12 +6,15 @@ import Sidebar from "@components/sidebar";
 import Table from "@components/table";
 
 export default function Home() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
+  const [showMiniSidebar, setShowMiniSidebar] = useState<boolean>(false);
 
   return (
     <div className="flex">
-      <Sidebar setSidebarCollapsed={setSidebarCollapsed} />
-      <Table sidebarCollapsed={sidebarCollapsed} />
+      <Sidebar
+        showMiniSidebar={showMiniSidebar}
+        setShowMiniSidebar={setShowMiniSidebar}
+      />
+      <Table showMiniSidebar={showMiniSidebar} />
     </div>
   );
 }

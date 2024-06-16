@@ -77,7 +77,7 @@ export enum ServiceTagFilterAdditionalOptions {
 
 export interface Waitlist {
   id: number;
-  createdOn: Date;
+  createdOn: string;
   payer: string;
   status: Status;
   email: string;
@@ -85,7 +85,7 @@ export interface Waitlist {
   services: string;
   serviceType: ServiceType;
   serviceStatus: ServiceStatus;
-  scheduled: Date;
+  scheduled: string;
 }
 
 export interface PaginationProps {
@@ -105,13 +105,13 @@ export interface TableHeader {
 
 export interface TableRow {
   id: number;
-  createdOn: Date;
+  createdOn: string;
   payer: string;
   status: Status;
   email: string;
   payerPhone: string;
   services: string;
-  scheduled: Date;
+  scheduled: string;
 }
 
 export interface Filter {
@@ -122,8 +122,8 @@ export interface Filter {
 export interface FilterValues {
   [Filters.Scheduled]: {
     type: ScheduledDateFilter;
-    startDate: Date | null;
-    endDate: Date | null;
+    startDate: string | null;
+    endDate: string | null;
   };
   [Filters.People]: {
     id: number;

@@ -4,8 +4,9 @@ import { useSelector } from "react-redux";
 import Image from "next/image";
 import _ from "lodash";
 
-import { TableHeader, TableRow, Waitlist } from "@types";
 import { RootState } from "@store";
+import { TableHeader, TableRow, Waitlist } from "@types";
+import { DEFAULT_TABLE_LIMIT, DEFAULT_TABLE_OFFSET } from "@constants";
 import Check from "@assets/check.svg";
 import Loader from "@components/loader";
 import Toolbar from "./components/toolbar";
@@ -13,7 +14,7 @@ import Footer from "./components/footer";
 import Row from "./components/row";
 
 interface TableProps {
-  sidebarCollapsed: boolean;
+  showMiniSidebar: boolean;
 }
 
 // Function to render table header cells
@@ -37,7 +38,7 @@ const getTableHeader = (header: TableHeader) => {
   );
 };
 
-const Table: React.FC<TableProps> = ({ sidebarCollapsed }) => {
+const Table: React.FC<TableProps> = ({ showMiniSidebar }) => {
   const tableHeaders = useSelector(
     (root: RootState) => root.tableSlice.headers
   );
@@ -50,8 +51,8 @@ const Table: React.FC<TableProps> = ({ sidebarCollapsed }) => {
     waitlist.map((waitlist) => ({ ...waitlist, hidden: false }))
   );
 
-  const [offset, setOffset] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(15);
+  const [offset, setOffset] = useState<number>(DEFAULT_TABLE_OFFSET);
+  const [limit, setLimit] = useState<number>(DEFAULT_TABLE_LIMIT);
   const [rows, setRows] = useState<TableRow[]>(
     currentWaitlist.current.slice(offset - 1, offset + limit - 1)
   );
@@ -65,15 +66,16 @@ const Table: React.FC<TableProps> = ({ sidebarCollapsed }) => {
   useEffect(() => {
     // Update rows according to new offset, limit or filters
     setRows(waitlist.slice(offset - 1, offset + limit - 1));
-    setRowsLoading(true);
+
+    if (!rowsLoading) setRowsLoading(true);
   }, [offset, limit, waitlist]);
 
   return (
     <div
       className="flex flex-col gap-0 rounded-md shadow-shadow_light bg-white"
       style={{
-        width: `calc(100vw - ${sidebarCollapsed ? "64" : "228"}px)`,
-        marginLeft: `${sidebarCollapsed ? "64" : "228"}px`,
+        width: `calc(100vw - ${showMiniSidebar ? "64" : "228"}px)`,
+        marginLeft: `${showMiniSidebar ? "64" : "228"}px`,
       }}
       role="main"
       aria-label="Main Content"

@@ -19,7 +19,8 @@ import ChevronDown from "@assets/chevron-down.svg";
 import Help from "@assets/help.svg";
 
 interface SidebarProps {
-  setSidebarCollapsed: Dispatch<SetStateAction<boolean>>;
+  showMiniSidebar: boolean;
+  setShowMiniSidebar: Dispatch<SetStateAction<boolean>>;
 }
 
 enum SidebarItemName {
@@ -53,8 +54,10 @@ const sidebarItems: SidebarItem[] = [
   },
 ];
 
-const Sidebar: React.FC<SidebarProps> = ({ setSidebarCollapsed }) => {
-  const [showMiniSidebar, setShowMiniSidebar] = useState<boolean>(false);
+const Sidebar: React.FC<SidebarProps> = ({
+  showMiniSidebar,
+  setShowMiniSidebar,
+}) => {
   const [selectedItem, setSelectedItem] = useState<SidebarItemName | null>(
     null
   );
@@ -66,7 +69,6 @@ const Sidebar: React.FC<SidebarProps> = ({ setSidebarCollapsed }) => {
   // Collapse sidebar
   const handleShowMiniBar = () => {
     setShowMiniSidebar((prev) => !prev);
-    setSidebarCollapsed((prev) => !prev);
   };
 
   // Function to render sidebar options

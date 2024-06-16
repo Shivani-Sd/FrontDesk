@@ -16,6 +16,12 @@ import {
 } from "date-fns";
 import _ from "lodash";
 
+export const isValidDate = (dateString: string) => {
+  const date = new Date(dateString);
+  
+  return !isNaN(date.getTime());
+};
+
 export const formatDate = (date: Date) => {
   const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: "short",
@@ -46,17 +52,21 @@ export const formatDate = (date: Date) => {
 };
 
 export const filterCustomScheduledDate = (
-  startDate: Date,
-  endDate: Date,
+  startDate: string,
+  endDate: string,
   waitlist: Waitlist[]
 ) => {
   let newwaitlist = _.cloneDeep(waitlist);
 
   if (startDate) {
-    newwaitlist = waitlist.filter((data) => data.scheduled >= startDate);
+    newwaitlist = waitlist.filter(
+      (data) => new Date(data.scheduled) >= new Date(startDate)
+    );
   }
   if (endDate)
-    newwaitlist = newwaitlist.filter((data) => data.scheduled <= endDate);
+    newwaitlist = newwaitlist.filter(
+      (data) => new Date(data.scheduled) <= new Date(endDate)
+    );
 
   return newwaitlist;
 };
